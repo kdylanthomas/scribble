@@ -1,14 +1,3 @@
-// goal: provide space for user to write a journal entry
-// upon submit, POST entry to db AND get entryID back from GET
-// then, make post request to indico /sentiment and /emotion for data
-// use those responses to build a entryAnalysis object and POST to db
-
-// 1. POST entry. on success, trigger GET 
-// 2. GET entry so you have the entryId  <-- get request should return a promise
-// 3. POST to indico /sentiment
-// 4. POST to indico /emotion
-// 5. POST entryAnalysis object to db 
-
 'use strict';
 
 app.controller('JournalCtrl', [

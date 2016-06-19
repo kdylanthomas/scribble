@@ -6,7 +6,8 @@ app.factory('authenticate', function ($location) {
 		getUser: () => currentUser,
 		setUser: (user) => {
 			currentUser = user;
-			$location.path('/journal'); // redirect user to journal view once authenticated
+			if (user !== null) $location.path('/journal')
+			else $location.path('/login'); // redirect user to journal view once authenticated
 		}
 	}
 });
