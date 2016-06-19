@@ -37,7 +37,9 @@ app.controller('JournalCtrl', [
 			fear: 0,
 			surprise: 0,
 			sadness: 0,
-			sentiment: 0
+			sentiment: 0,
+			userId: null,
+			entryId: null
 		};
 
 		let startedWriting = false;
@@ -57,10 +59,11 @@ app.controller('JournalCtrl', [
 				res => {
 					let submittedEntry = res.data;
 					console.log('successfully saved entry!', submittedEntry);
-					analyzeSentiment(submittedEntry.Text);
-					analyzeEmotion(submittedEntry.Text);
+					$scope.entryAnalysis.entryId = submittedEntry.EntryId;
+					$scope.entryAnalysis.userId = submittedEntry.UserId;
+					return analyzeSentiment(submittedEntry.Text);
 				},
-				err => console.log('Something went wrong:', err) // err
+				err => console.error('Something went wrong:', err) // err
 			);
 		}
 
@@ -76,8 +79,12 @@ app.controller('JournalCtrl', [
 			    data: JSON.stringify({'data': text})
 			})
 			.then(
-				res => console.log('success! sentiment data:', res.data),
-				err => console.log('error :(', err)
+				res => {
+					console.log('success! sentiment data:', res.data);
+					$scope.entryAnalysis.sentiment = res.data.results;
+					return analyzeEmotion(text);
+				},
+				err => console.error('error :(', err)
 			)
 		}
 
@@ -91,9 +98,28 @@ app.controller('JournalCtrl', [
 			    data: JSON.stringify({'data': text})
 			})
 			.then(
-				res => console.log('success! emotion data:', res.data),
-				err => console.log('error :(', err)
+				res => {
+					console.log('success! emotion data:', res.data);
+					let results = res.data.results;
+					$scope.entryAnalysis.anger = results.anger;
+					$scope.entryAnalysis.joy = results.joy;
+					$scope.entryAnalysis.fear = results.fear;
+					$scope.entryAnalysis.surprise = results.surprise;
+					$scope.entryAnalysis.sadness = results.sadness;
+					return postEntryAnalysis();
+				},
+				err => console.error('error :(', err)
 			)
+		}
+
+		let postEntryAnalysis = () => {
+			$http.post(`${journalServer}EntryAnalysis`, $scope.entryAnalysis)
+			.then(
+				res => {
+					console.log('successfully saved entry analysis!', res.data);
+				},
+				err => console.error('Something went wrong:', err) 
+			);
 		}
 
 	}
