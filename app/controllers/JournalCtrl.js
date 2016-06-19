@@ -57,7 +57,7 @@ app.controller('JournalCtrl', [
 				res => {
 					let submittedEntry = res.data;
 					console.log('successfully saved entry!', submittedEntry);
-					analyzeSentiment(submittedEntry.text);
+					analyzeSentiment(submittedEntry.Text);
 				},
 				err => console.log('Something went wrong:', err) // err
 			);
@@ -66,9 +66,16 @@ app.controller('JournalCtrl', [
 		let getWordCount = (text) => text.split(' ').length
 
 		let analyzeSentiment = (text) => {
-			$http.post(indicoSentiment, {'data': text})
+			$http({
+				method: 'POST',
+				url: indicoSentiment,
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+			    data: JSON.stringify({'data': text})
+			})
 			.then(
-				res => console.log('success!', res),
+				res => console.log('success! sentiment data:', res.data),
 				err => console.log('error :(', err)
 			)
 		}
