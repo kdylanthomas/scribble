@@ -58,6 +58,7 @@ app.controller('JournalCtrl', [
 					let submittedEntry = res.data;
 					console.log('successfully saved entry!', submittedEntry);
 					analyzeSentiment(submittedEntry.Text);
+					analyzeEmotion(submittedEntry.Text);
 				},
 				err => console.log('Something went wrong:', err) // err
 			);
@@ -80,7 +81,20 @@ app.controller('JournalCtrl', [
 			)
 		}
 
-		$scope.analyzeEmotion = function (text) {}
+		let analyzeEmotion = function (text) {
+			$http({
+				method: 'POST',
+				url: indicoEmotion,
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+			    data: JSON.stringify({'data': text})
+			})
+			.then(
+				res => console.log('success! emotion data:', res.data),
+				err => console.log('error :(', err)
+			)
+		}
 
 	}
 ]);
