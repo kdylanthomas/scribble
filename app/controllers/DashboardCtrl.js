@@ -10,19 +10,6 @@ app.controller('DashboardCtrl', [
 	'reformat-emotion-data',
 	function ($scope, $location, authenticate, journalServer, $http, $q, reformatEmotionData) {
 
-		$scope.dataToUse = [
-			{'emotion': 'anger', 'value': 0.101},
-			{'emotion': 'fear', 'value': 0.045},
-			{'emotion': 'joy', 'value': 0.351},
-			{'emotion': 'surprise', 'value': 0.076},
-			{'emotion': 'sadness', 'value': 0.204}
-		];
-
-		let setUser = () => {
-			console.log('1: set the user');
-			$scope.currentUser = authenticate.getUser();
-		}
-
 		$scope.userInsights = [];
 
 		$scope.emotionAverages = {
@@ -42,6 +29,11 @@ app.controller('DashboardCtrl', [
 		$scope.dominantEmotion = null;
 
 		$scope.sentimentDescription = null;
+
+		let setUser = () => {
+			console.log('1: set the user');
+			$scope.currentUser = authenticate.getUser();
+		}
 
 		let getEntryInsights = () => {
 			return $q((resolve, reject) => {
@@ -83,7 +75,11 @@ app.controller('DashboardCtrl', [
 			$scope.wordCountAverage = wordCountSum / analyses.length;
 			findDominantEmotion();
 			describeSentiment();
-			$scope.d3EmotionData = reformatEmotionData($scope.emotionAverages); // current issue: async not playing well with d3
+			$.when(reformatEmotionData($scope.emotionAverages)).done((json) => {
+				console.log('done!', json);
+				$scope.d3EmotionData = json;
+				$scope.$broadcast("EmotionData_Ready");
+			}); // current issue: async not playing well with d3
 		}
 
 		let findDominantEmotion = () => {
