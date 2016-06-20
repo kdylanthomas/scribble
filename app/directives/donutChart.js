@@ -17,7 +17,7 @@ app.directive('donutChart', function () {
 
 			scope.$watch('data', function (data) {
 				if (data == null) return;
-				
+
 				var data = scope.data; // note to self, this is crucial
 				
 				console.log('this is the data in the directive: ', data);
@@ -32,11 +32,13 @@ app.directive('donutChart', function () {
 				    return d.value;
 				});
 
-			   var svg = d3.select("body").append("svg")
+			   var svg = d3.select(element[0]).append("svg")
 			    .attr("width", width)
 			    .attr("height", height)
 			    .append("g")
 			    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+			    svg.selectAll('*').remove();
 
 			    var g = svg.selectAll(".arc")
 			        .data(pie(data))
