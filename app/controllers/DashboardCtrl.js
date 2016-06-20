@@ -7,7 +7,7 @@ app.controller('DashboardCtrl', [
 	'$http',
 	'$q',
 	function ($scope, authenticate, journalServer, $http, $q) {
-		
+
 		let setUser = () => {
 			console.log('1: set the user');
 			$scope.currentUser = authenticate.getUser();
@@ -24,6 +24,10 @@ app.controller('DashboardCtrl', [
 			sentimentAvg: 0,
 			wordCountAvg: 0
 		};
+
+		$scope.dominantEmotion = null;
+
+		$scope.sentimentDescription = null;
 
 		let getEntryInsights = () => {
 			return $q((resolve, reject) => {
@@ -61,6 +65,36 @@ app.controller('DashboardCtrl', [
 			$scope.userAverages.sadnessAvg = sadnessSum / analyses.length;
 			$scope.userAverages.sentimentAvg = sentimentSum / analyses.length;
 			$scope.userAverages.wordCountAvg = wordCountSum / analyses.length;
+			findDominantEmotion();
+			describeSentiment();
+		}
+
+		let findDominantEmotion = () => {
+			let currHighestValue = 0;
+			let currDominantEmotion = '';
+			for (let emotion in $scope.userAverages) {
+				if (emotion !== 'wordCountAvg' && emotion !== 'sentimentAvg') {
+					if ($scope.userAverages[emotion] > currHighestValue) {
+						currDominantEmotion = emotion;
+					}
+				}
+			}
+			$scope.dominantEmotion = currDominantEmotion.split('A')[0];
+		}
+
+		let describeSentiment = () => {
+			let sentiment = $scope.userAverages.sentimentAvg;
+			if (sentiment >= 0 && sentiment <= 0.2) {
+				$scope.sentimentDescription = "very negative";
+			} else if (sentiment > 0.2 && sentiment <= 0.45) {
+				$scope.sentimentDescription = "somewhat negative";
+			} else if (sentiment > 0.45 && sentiment <= 0.55) {
+				$scope.sentimentDescription = "neutral";
+			} else if (sentiment > 0.55 && sentiment <= 0.8) {
+				$scope.sentimentDescription = "somewhat positive";
+			} else {
+				$scope.sentimentDescription = "very positive";
+			}
 		}
 
 		$.when(setUser()).done(() => { // defer instead of promise, because factory fn isn't async (?)
