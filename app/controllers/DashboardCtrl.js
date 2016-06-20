@@ -2,11 +2,21 @@
 
 app.controller('DashboardCtrl', [
 	'$scope',
+	'$location',
 	'authenticate',
 	'journalServer',
 	'$http',
 	'$q',
-	function ($scope, authenticate, journalServer, $http, $q) {
+	'reformat-emotion-data',
+	function ($scope, $location, authenticate, journalServer, $http, $q, reformatEmotionData) {
+
+		$scope.dataToUse = [
+			{'emotion': 'anger', 'value': 0.101},
+			{'emotion': 'fear', 'value': 0.045},
+			{'emotion': 'joy', 'value': 0.351},
+			{'emotion': 'surprise', 'value': 0.076},
+			{'emotion': 'sadness', 'value': 0.204}
+		];
 
 		let setUser = () => {
 			console.log('1: set the user');
@@ -15,15 +25,19 @@ app.controller('DashboardCtrl', [
 
 		$scope.userInsights = [];
 
-		$scope.userAverages = {
-			angerAvg: 0,
-			joyAvg: 0, 
-			fearAvg: 0, 
-			surpriseAvg: 0,
-			sadnessAvg: 0,
-			sentimentAvg: 0,
-			wordCountAvg: 0
+		$scope.emotionAverages = {
+			anger: 0,
+			joy: 0, 
+			fear: 0, 
+			surprise: 0,
+			sadness: 0
 		};
+
+		$scope.d3EmotionData = null;
+
+		$scope.sentimentAverage = null;
+
+		$scope.wordCountAverage = null;
 
 		$scope.dominantEmotion = null;
 
@@ -39,6 +53,8 @@ app.controller('DashboardCtrl', [
 			});
 		}
 
+		// for dashboard AND journal, i need average emotions formatted like {'emotion': 'anger', 'value': 1}
+		// one needs to calculate averages first, one doesn't
 		let findAverages = (analyses) => {
 			console.log('3: calculating averages', analyses);
 			let angerSum = 0;
@@ -58,32 +74,31 @@ app.controller('DashboardCtrl', [
 				sentimentSum += el.Sentiment;
 				wordCountSum += el.WordCount;
 			});
-			$scope.userAverages.angerAvg = angerSum / analyses.length;
-			$scope.userAverages.joyAvg = joySum / analyses.length;
-			$scope.userAverages.fearAvg = fearSum / analyses.length;
-			$scope.userAverages.surpriseAvg = surpriseSum / analyses.length;
-			$scope.userAverages.sadnessAvg = sadnessSum / analyses.length;
-			$scope.userAverages.sentimentAvg = sentimentSum / analyses.length;
-			$scope.userAverages.wordCountAvg = wordCountSum / analyses.length;
+			$scope.emotionAverages.anger = angerSum / analyses.length;
+			$scope.emotionAverages.joy = joySum / analyses.length;
+			$scope.emotionAverages.fear = fearSum / analyses.length;
+			$scope.emotionAverages.surprise = surpriseSum / analyses.length;
+			$scope.emotionAverages.sadness = sadnessSum / analyses.length;
+			$scope.sentimentAverage = sentimentSum / analyses.length;
+			$scope.wordCountAverage = wordCountSum / analyses.length;
 			findDominantEmotion();
 			describeSentiment();
+			$scope.d3EmotionData = reformatEmotionData($scope.emotionAverages); // current issue: async not playing well with d3
 		}
 
 		let findDominantEmotion = () => {
 			let currHighestValue = 0;
 			let currDominantEmotion = '';
-			for (let emotion in $scope.userAverages) {
-				if (emotion !== 'wordCountAvg' && emotion !== 'sentimentAvg') {
-					if ($scope.userAverages[emotion] > currHighestValue) {
-						currDominantEmotion = emotion;
-					}
+			for (let emotion in $scope.emotionAverages) {
+				if ($scope.emotionAverages[emotion] > currHighestValue) {
+					currDominantEmotion = emotion;
 				}
 			}
-			$scope.dominantEmotion = currDominantEmotion.split('A')[0];
+			$scope.dominantEmotion = currDominantEmotion;
 		}
 
 		let describeSentiment = () => {
-			let sentiment = $scope.userAverages.sentimentAvg;
+			let sentiment = $scope.sentimentAverage;
 			if (sentiment >= 0 && sentiment <= 0.2) {
 				$scope.sentimentDescription = "very negative";
 			} else if (sentiment > 0.2 && sentiment <= 0.45) {
@@ -109,5 +124,6 @@ app.controller('DashboardCtrl', [
 			)
 		})
 
+		
 	}
 ]);
