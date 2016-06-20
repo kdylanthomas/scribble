@@ -24,6 +24,8 @@ app.controller('DashboardCtrl', [
 
 		$scope.sentimentAverage = null;
 
+		$scope.d3SentimentData = null;
+
 		$scope.wordCountAverage = null;
 
 		$scope.dominantEmotion = null;
@@ -75,10 +77,10 @@ app.controller('DashboardCtrl', [
 			$scope.wordCountAverage = wordCountSum / analyses.length;
 			findDominantEmotion();
 			describeSentiment();
+			$scope.d3SentimentData = {'actual': $scope.sentimentAverage, 'total': 1};
 			$.when(reformatEmotionData($scope.emotionAverages)).done((json) => {
 				console.log('done!', json);
 				$scope.d3EmotionData = json;
-				$scope.$broadcast("EmotionData_Ready");
 			}); // current issue: async not playing well with d3
 		}
 
