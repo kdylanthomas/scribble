@@ -4,11 +4,10 @@ app.controller('JournalCtrl', [
 	'$scope',
 	'authenticate',
 	'$http',
-	'$q',
 	'journalServer',
 	'indicoEmotion',
 	'indicoSentiment',
-	function ($scope, authenticate, $http, $q, journalServer, indicoEmotion, indicoSentiment) {
+	function ($scope, authenticate, $http, journalServer, indicoEmotion, indicoSentiment) {
 		//$scope.currentUser = authenticate.getUser(); // get user currently logged in
 
 		$scope.journalEntry = {

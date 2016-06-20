@@ -10,7 +10,7 @@ app.config(['$routeProvider', '$httpProvider',
   ($routeProvider, $httpProvider) => {
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
-    
+
     $routeProvider.
       when('/login', {
         templateUrl: 'partials/login-view.html',
@@ -19,6 +19,10 @@ app.config(['$routeProvider', '$httpProvider',
       when('/journal', {
         templateUrl: 'partials/journal-view.html',
         controller: 'JournalCtrl'
+      }).
+      when('/dashboard', {
+        templateUrl: 'partials/dashboard-view.html',
+        controller: 'DashboardCtrl'
       }).
       otherwise({
         redirectTo: '/login'
