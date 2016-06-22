@@ -1,11 +1,5 @@
 'use strict';
 
-// things to add: 
-// 1. a list of existing journal entries you can go back to
-// 2. a way to view those journal entries
-// 3. a way to edit the entry
-// 4. a way to delete the entry
-
 app.controller('JournalCtrl', [
 	'$scope',
 	'authenticate',
@@ -55,7 +49,7 @@ app.controller('JournalCtrl', [
 		};
 
 		// **********************
-		// POST/PUT ENTRY
+		// GET ENTRIES ON PAGE LOAD
 		// **********************
 
 		$scope.getAllEntries = function () {
@@ -210,10 +204,28 @@ app.controller('JournalCtrl', [
 			} else {
 				$http.post(`${journalServer}EntryAnalysis`, $scope.entryAnalysis)
 				.then(
-					res => console.log('successfully saved entry analysis!', res.data),
+					res => {
+						console.log('successfully saved entry analysis!', res.data);
+						$scope.getAllEntries();
+					},
 					err => console.error(err) 
 				);
 			}
+		}
+
+		// **********************
+		// DELETE ENTRY
+		// **********************
+
+		$scope.deleteEntry = function () {
+			$http.delete(`${journalServer}Entry/${entryToEdit}`)
+			.then(
+				() => {
+					$scope.restoreDefaults();
+					$scope.getAllEntries();
+				},
+				err => console.error(err)
+			);
 		}
 
 	}

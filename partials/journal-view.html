@@ -12,6 +12,9 @@
 		</div>
 		<button ng-click="restoreDefaults()">Write New Entry</button>
 	</div>
-	<textarea name="journal-entry" id="journal-entry" cols="60" rows="20" ng-model="journalEntry.text" ng-keypress="assignDateStarted()"></textarea>
-	<button ng-click="submitEntry()">{{ textForSubmit }}</button>
+	<div>
+		<button ng-if="isEditing" ng-click="deleteEntry()">Delete This Entry</button>
+		<div><textarea name="journal-entry" id="journal-entry" cols="60" rows="20" ng-model="journalEntry.text" ng-keypress="assignDateStarted()"></textarea></div>
+		<button ng-click="submitEntry()">{{ textForSubmit }}</button>
+	</div>
 </section>
