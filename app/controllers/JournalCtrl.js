@@ -46,7 +46,14 @@ app.controller('JournalCtrl', [
 		$scope.getAllEntries = function () {
 			$http.get(`${journalServer}Entry?UserId=5`)
 			.then(
-				res => $scope.allUserEntries = res.data,
+				res => {
+					let entries = res.data;
+					entries.forEach((entry, i) => {
+						entry.formattedDate = moment(entry.DateSubmitted).format('dddd, MMMM Do YYYY');
+						console.log(entry);
+					});
+					$scope.allUserEntries = entries;
+				},
 				err => console.log(err)
 			)
 		}
@@ -72,44 +79,50 @@ app.controller('JournalCtrl', [
 			}
 		}
 
+		let postNewEntry = entry => {
+			$http.post(`${journalServer}Entry`, JSON.stringify(entry))
+			.then(
+			res => {
+				let submittedEntry = res.data;
+				console.log('successfully saved entry!', submittedEntry);
+				$scope.entryAnalysis.entryId = submittedEntry.EntryId;
+				$scope.entryAnalysis.userId = submittedEntry.UserId;
+				return analyzeSentiment(submittedEntry.Text);
+			},
+			err => console.error('Something went wrong:', err) // err
+		)};
+
+		let editExistingEntry = entry => {
+			$http.put(`${journalServer}Entry/${entryToEdit}`, JSON.stringify(entry))
+			.then(
+			res => {
+				let submittedEntry = res.data;
+				$scope.entryAnalysis.entryId = entryToEdit;
+				$scope.entryAnalysis.userId = $scope.journalEntry.userId;
+				$http.get(`${journalServer}EntryAnalysis?EntryId=${entryToEdit}`)
+				.then(
+					res => {
+						console.log(res.data[0]);
+						let entryAnalysis = res.data[0];
+						analysisToEdit = entryAnalysis.EntryAnalysisId;
+						return analyzeSentiment($scope.journalEntry.text);
+					},
+					err => console.log(err)
+				);
+			},
+			err => console.error('Something went wrong:', err) // err
+			);
+		}
+
 		$scope.submitEntry = function () {
 			$scope.journalEntry.dateSubmitted = new Date();
 			$scope.journalEntry.wordCount = getWordCount($scope.journalEntry.text);
 			if ($scope.isEditing === false) {
-				$http.post(`${journalServer}Entry`, JSON.stringify($scope.journalEntry))
-				.then(
-				res => {
-					let submittedEntry = res.data;
-					console.log('successfully saved entry!', submittedEntry);
-					$scope.entryAnalysis.entryId = submittedEntry.EntryId;
-					$scope.entryAnalysis.userId = submittedEntry.UserId;
-					return analyzeSentiment(submittedEntry.Text);
-				},
-				err => console.error('Something went wrong:', err) // err
-				);
+				postNewEntry($scope.journalEntry);
 			} else {
 				$scope.journalEntry.EntryId = entryToEdit;
-				$http.put(`${journalServer}Entry/${entryToEdit}`, JSON.stringify($scope.journalEntry))
-				.then(
-				res => {
-					let submittedEntry = res.data;
-					$scope.entryAnalysis.entryId = entryToEdit;
-					$scope.entryAnalysis.userId = $scope.journalEntry.userId;
-					$http.get(`${journalServer}EntryAnalysis?EntryId=${entryToEdit}`)
-					.then(
-						res => {
-							console.log(res.data[0]);
-							let entryAnalysis = res.data[0];
-							analysisToEdit = entryAnalysis.EntryAnalysisId;
-							return analyzeSentiment($scope.journalEntry.text);
-						},
-						err => console.log(err)
-					);
-				},
-				err => console.error('Something went wrong:', err) // err
-				);
+				editExistingEntry($scope.journalEntry);
 			}
-
 		}
 
 		let getWordCount = (text) => text.split(' ').length
