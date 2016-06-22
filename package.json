@@ -21,6 +21,7 @@
     "angular-route": "^1.5.7",
     "bootstrap": "^3.3.6",
     "cors-anywhere": "^0.4.0",
-    "jquery": "^2.2.4"
+    "jquery": "^2.2.4",
+    "moment": "^2.13.0"
   }
 }

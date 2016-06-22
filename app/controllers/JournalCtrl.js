@@ -1,5 +1,11 @@
 'use strict';
 
+// things to add: 
+// 1. a list of existing journal entries you can go back to
+// 2. a way to view those journal entries
+// 3. a way to edit the entry
+// 4. a way to delete the entry
+
 app.controller('JournalCtrl', [
 	'$scope',
 	'authenticate',
@@ -15,7 +21,6 @@ app.controller('JournalCtrl', [
 			dateStarted: null,
 			dateSubmitted: null,
 			wordCount: 0,
-			//userId: $scope.currentUser.UserId
 			userId: 5
 		}
 
@@ -30,7 +35,35 @@ app.controller('JournalCtrl', [
 			entryId: null
 		};
 
+		$scope.allUserEntries = [];
+
 		let startedWriting = false;
+
+		$scope.isEditing = false;
+		let entryToEdit = null;
+		let analysisToEdit = null;
+
+		$scope.getAllEntries = function () {
+			$http.get(`${journalServer}Entry?UserId=5`)
+			.then(
+				res => $scope.allUserEntries = res.data,
+				err => console.log(err)
+			)
+		}
+
+		$scope.displaySingleEntry = function (id) { // for user to view and edit an entry
+			$http.get(`${journalServer}Entry/${id}`)
+			.then(
+				res => {
+					let entry = res.data;
+					$scope.journalEntry.text = entry.Text;
+					$scope.journalEntry.dateStarted = entry.dateStarted;
+					$scope.isEditing = true;
+					entryToEdit = entry.EntryId;
+				},
+				err => console.log(err)
+			)
+		}
 
 		$scope.assignDateStarted = function () { // method on $scope to use ng-keypress directive
 			if (!startedWriting) {
@@ -39,11 +72,12 @@ app.controller('JournalCtrl', [
 			}
 		}
 
-		$scope.postEntry = function () {
+		$scope.submitEntry = function () {
 			$scope.journalEntry.dateSubmitted = new Date();
 			$scope.journalEntry.wordCount = getWordCount($scope.journalEntry.text);
-			$http.post(`${journalServer}Entry`, JSON.stringify($scope.journalEntry))
-			.then(
+			if ($scope.isEditing === false) {
+				$http.post(`${journalServer}Entry`, JSON.stringify($scope.journalEntry))
+				.then(
 				res => {
 					let submittedEntry = res.data;
 					console.log('successfully saved entry!', submittedEntry);
@@ -52,7 +86,30 @@ app.controller('JournalCtrl', [
 					return analyzeSentiment(submittedEntry.Text);
 				},
 				err => console.error('Something went wrong:', err) // err
-			);
+				);
+			} else {
+				$scope.journalEntry.EntryId = entryToEdit;
+				$http.put(`${journalServer}Entry/${entryToEdit}`, JSON.stringify($scope.journalEntry))
+				.then(
+				res => {
+					let submittedEntry = res.data;
+					$scope.entryAnalysis.entryId = entryToEdit;
+					$scope.entryAnalysis.userId = $scope.journalEntry.userId;
+					$http.get(`${journalServer}EntryAnalysis?EntryId=${entryToEdit}`)
+					.then(
+						res => {
+							console.log(res.data[0]);
+							let entryAnalysis = res.data[0];
+							analysisToEdit = entryAnalysis.EntryAnalysisId;
+							return analyzeSentiment($scope.journalEntry.text);
+						},
+						err => console.log(err)
+					);
+				},
+				err => console.error('Something went wrong:', err) // err
+				);
+			}
+
 		}
 
 		let getWordCount = (text) => text.split(' ').length
@@ -101,13 +158,22 @@ app.controller('JournalCtrl', [
 		}
 
 		let postEntryAnalysis = () => {
-			$http.post(`${journalServer}EntryAnalysis`, $scope.entryAnalysis)
-			.then(
-				res => {
-					console.log('successfully saved entry analysis!', res.data);
-				},
-				err => console.error('Something went wrong:', err) 
-			);
+			if ($scope.isEditing) {
+				$scope.entryAnalysis.EntryAnalysisId = analysisToEdit;
+				$http.put(`${journalServer}EntryAnalysis/${analysisToEdit}`, $scope.entryAnalysis)
+				.then(
+					res => console.log('successfully edited entry analysis!'),
+					err => console.log(err)
+				);
+			} else {
+				$http.post(`${journalServer}EntryAnalysis`, $scope.entryAnalysis)
+				.then(
+					res => {
+						console.log('successfully saved entry analysis!', res.data);
+					},
+					err => console.error('Something went wrong:', err) 
+				);
+			}
 		}
 
 	}
