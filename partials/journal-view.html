@@ -1,13 +1,16 @@
 <div ng-include="'partials/nav.html'"></div>
 <section ng-init="getAllEntries()">
-	<div class="dropdown">
-	  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-	    Choose a previous entry:
-	    <span class="caret"></span>
-	  </button>
-	  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-	    <li ng-repeat="entry in allUserEntries" ng-click="displaySingleEntry(entry.EntryId)">{{ entry.formattedDate }}</li>
-	  </ul>
+	<div>
+		<div class="dropdown">
+		  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+		    Choose a previous entry:
+		    <span class="caret"></span>
+		  </button>
+		  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+		    <li ng-repeat="entry in allUserEntries" ng-click="displaySingleEntry(entry.EntryId)">{{ entry.formattedDate }}</li>
+		  </ul>
+		</div>
+		<button ng-click="restoreDefaults()">Write New Entry</button>
 	</div>
 	<textarea name="journal-entry" id="journal-entry" cols="60" rows="20" ng-model="journalEntry.text" ng-keypress="assignDateStarted()"></textarea>
 	<button ng-click="submitEntry()">{{ textForSubmit }}</button>

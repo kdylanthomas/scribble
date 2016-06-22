@@ -45,6 +45,15 @@ app.controller('JournalCtrl', [
 		let entryToEdit = null;
 		let analysisToEdit = null;
 
+		$scope.restoreDefaults = function () {
+			$scope.isEditing = false;
+			$scope.textForSubmit = "Submit";
+			$scope.journalEntry.text = "";
+			startedWriting = false;
+			entryToEdit = null;
+			analysisToEdit = null;
+		};
+
 		// **********************
 		// POST/PUT ENTRY
 		// **********************
