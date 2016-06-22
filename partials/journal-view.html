@@ -10,5 +10,5 @@
 	  </ul>
 	</div>
 	<textarea name="journal-entry" id="journal-entry" cols="60" rows="20" ng-model="journalEntry.text" ng-keypress="assignDateStarted()"></textarea>
-	<button ng-click="submitEntry()">Submit</button>
+	<button ng-click="submitEntry()">{{ textForSubmit }}</button>
 </section>

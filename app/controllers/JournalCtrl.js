@@ -37,11 +37,17 @@ app.controller('JournalCtrl', [
 
 		$scope.allUserEntries = [];
 
-		let startedWriting = false;
-
+		// DEFAULT VALUES ON PAGE LOAD
 		$scope.isEditing = false;
+		$scope.textForSubmit = "Submit";
+
+		let startedWriting = false;
 		let entryToEdit = null;
 		let analysisToEdit = null;
+
+		// **********************
+		// POST/PUT ENTRY
+		// **********************
 
 		$scope.getAllEntries = function () {
 			$http.get(`${journalServer}Entry?UserId=5`)
@@ -49,7 +55,7 @@ app.controller('JournalCtrl', [
 				res => {
 					let entries = res.data;
 					entries.forEach((entry, i) => {
-						entry.formattedDate = moment(entry.DateSubmitted).format('dddd, MMMM Do YYYY');
+						entry.formattedDate = moment(entry.DateStarted).format('dddd, MMMM Do YYYY');
 						console.log(entry);
 					});
 					$scope.allUserEntries = entries;
@@ -64,8 +70,9 @@ app.controller('JournalCtrl', [
 				res => {
 					let entry = res.data;
 					$scope.journalEntry.text = entry.Text;
-					$scope.journalEntry.dateStarted = entry.dateStarted;
+					$scope.journalEntry.dateStarted = entry.DateStarted;
 					$scope.isEditing = true;
+					$scope.textForSubmit = "Save Edits";
 					entryToEdit = entry.EntryId;
 				},
 				err => console.log(err)
@@ -73,11 +80,15 @@ app.controller('JournalCtrl', [
 		}
 
 		$scope.assignDateStarted = function () { // method on $scope to use ng-keypress directive
-			if (!startedWriting) {
+			if (!startedWriting && !$scope.isEditing) {
 				$scope.journalEntry.dateStarted = new Date();
 				startedWriting = true;
 			}
 		}
+
+		// **********************
+		// POST/PUT ENTRY
+		// **********************
 
 		let postNewEntry = entry => {
 			$http.post(`${journalServer}Entry`, JSON.stringify(entry))
@@ -125,6 +136,11 @@ app.controller('JournalCtrl', [
 			}
 		}
 
+
+		// **********************
+		// GETTING ANALYTICS
+		// **********************
+
 		let getWordCount = (text) => text.split(' ').length
 
 		let analyzeSentiment = (text) => {
@@ -170,6 +186,10 @@ app.controller('JournalCtrl', [
 			)
 		}
 
+		// **********************
+		// POST/PUT ENTRY ANALYSIS
+		// **********************
+
 		let postEntryAnalysis = () => {
 			if ($scope.isEditing) {
 				$scope.entryAnalysis.EntryAnalysisId = analysisToEdit;
@@ -181,10 +201,8 @@ app.controller('JournalCtrl', [
 			} else {
 				$http.post(`${journalServer}EntryAnalysis`, $scope.entryAnalysis)
 				.then(
-					res => {
-						console.log('successfully saved entry analysis!', res.data);
-					},
-					err => console.error('Something went wrong:', err) 
+					res => console.log('successfully saved entry analysis!', res.data),
+					err => console.error(err) 
 				);
 			}
 		}
