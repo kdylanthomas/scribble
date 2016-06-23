@@ -34,12 +34,12 @@ app.controller('DashboardCtrl', [
 
 		let setUser = () => {
 			console.log('1: set the user');
-			$scope.currentUser = authenticate.getUser();
+			$scope.currentUser = parseInt(authenticate.getUser());
 		}
 
 		let getEntryInsights = () => {
 			return $q((resolve, reject) => {
-				$http.get(`${journalServer}${$scope.currentUser.EntryAnalyses}`)
+				$http.get(`${journalServer}EntryAnalysis?UserId=${$scope.currentUser}`)
 		 		.then(
 					res => resolve(res.data),
 					err => reject(err)

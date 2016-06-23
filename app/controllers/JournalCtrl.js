@@ -8,14 +8,14 @@ app.controller('JournalCtrl', [
 	'indicoEmotion',
 	'indicoSentiment',
 	function ($scope, authenticate, $http, journalServer, indicoEmotion, indicoSentiment) {
-		//$scope.currentUser = authenticate.getUser(); // get user currently logged in
+		$scope.currentUser = authenticate.getUser(); // get user currently logged in
 
 		$scope.journalEntry = {
 			text: '',
 			dateStarted: null,
 			dateSubmitted: null,
 			wordCount: 0,
-			userId: 5
+			userId: parseInt($scope.currentUser)
 		}
 
 		$scope.entryAnalysis = {
