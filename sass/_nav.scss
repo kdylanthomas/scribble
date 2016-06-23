@@ -1,0 +1,17 @@
+.page-navigation {
+	background-color: #F96468;
+	font-family: 'Shadows Into Light Two', cursive;
+	.title, .title:hover {
+		color: #FFCBBB;
+		font-size: 1.75em;
+	}
+	.nav-links {
+		li a {
+			color: #fff;
+			font-size: 1.2em;
+		}
+		li a:hover {
+			color: #FFCBBB;
+		}
+	}
+}
