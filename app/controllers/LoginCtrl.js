@@ -13,6 +13,7 @@ app.controller('LoginCtrl', [
 			    console.log(result)
 			    result.me().done(data => { // data is user info object
 			    	console.log(data);
+			    	localStorage.setItem('currUserName', data.firstname);
 			    	let user = JSON.stringify({
 			    		username: data.email,
 			    		firstName: data.firstname,

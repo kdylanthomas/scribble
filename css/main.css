@@ -44,3 +44,51 @@
     font-size: 1.2em; }
   .page-navigation .nav-links li a:hover {
     color: #FFCBBB; }
+
+.journal-view {
+  padding-bottom: 2%; }
+  .journal-view .welcome {
+    text-align: center;
+    font-family: 'Shadows Into Light Two', cursive; }
+  .journal-view .journal-options {
+    font-family: 'Dosis', sans-serif;
+    font-size: 1.25em;
+    margin-bottom: 2%;
+    vertical-align: middle;
+    text-align: center; }
+    .journal-view .journal-options .select-existing {
+      display: inline-block;
+      padding: 1%;
+      margin-right: 4%;
+      cursor: pointer; }
+    .journal-view .journal-options .create-new {
+      display: inline-block;
+      margin-left: 1%; }
+  .journal-view .journal-container {
+    background-color: #FFEDC7;
+    box-shadow: 5px 5px 10px #CBBC94; }
+    .journal-view .journal-container .entry-header {
+      font-family: 'Dosis', sans-serif;
+      text-align: right;
+      margin-top: 1%; }
+      .journal-view .journal-container .entry-header span {
+        font-size: 1.25em; }
+      .journal-view .journal-container .entry-header a {
+        color: #BD0202; }
+      .journal-view .journal-container .entry-header a:hover {
+        color: #961010; }
+    .journal-view .journal-container textarea {
+      font-family: 'Dosis', sans-serif;
+      font-size: 1.25em;
+      background-color: #FFEDC7;
+      box-shadow: none;
+      border-style: none;
+      width: 95%;
+      min-height: 300px;
+      opacity: 1; }
+  .journal-view .submit {
+    margin-top: 2%; }
+    .journal-view .submit button {
+      background-color: #F96468;
+      color: #fff;
+      font-family: 'Shadows Into Light Two', cursive; }

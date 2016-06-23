@@ -9,6 +9,7 @@ app.factory('authenticate', function ($location) {
 				localStorage.removeItem('currUserId');
 				$location.path('/login');
 			} else {
+				console.log(user);
 				localStorage.setItem('currUserId', user.UserId);
 				$location.path('/journal');
 			}

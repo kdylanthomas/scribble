@@ -9,6 +9,8 @@ app.controller('JournalCtrl', [
 	'indicoSentiment',
 	function ($scope, authenticate, $http, journalServer, indicoEmotion, indicoSentiment) {
 		$scope.currentUser = authenticate.getUser(); // get user currently logged in
+		$scope.currUserName = localStorage.getItem('currUserName');
+		$scope.currDate = moment().format('dddd, MMMM Do');
 
 		$scope.journalEntry = {
 			text: '',
@@ -43,6 +45,7 @@ app.controller('JournalCtrl', [
 			$scope.isEditing = false;
 			$scope.textForSubmit = "Submit";
 			$scope.journalEntry.text = "";
+			$scope.journalEntry.formattedDate = null;
 			startedWriting = false;
 			entryToEdit = null;
 			analysisToEdit = null;
@@ -74,6 +77,7 @@ app.controller('JournalCtrl', [
 					let entry = res.data;
 					$scope.journalEntry.text = entry.Text;
 					$scope.journalEntry.dateStarted = entry.DateStarted;
+					$scope.journalEntry.formattedDate = moment(entry.DateStarted).format('MMMM D, YYYY');
 					$scope.isEditing = true;
 					$scope.textForSubmit = "Save Edits";
 					entryToEdit = entry.EntryId;

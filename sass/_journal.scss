@@ -1,0 +1,60 @@
+.journal-view {
+	padding-bottom: 2%;
+	.welcome {
+		text-align: center;
+		font-family: 'Shadows Into Light Two', cursive;
+	}
+	.journal-options {
+		font-family: 'Dosis', sans-serif;
+		font-size: 1.25em;
+		margin-bottom: 2%;
+		vertical-align: middle;
+		text-align: center;
+		.select-existing {
+			display: inline-block;
+			padding: 1%;
+			margin-right: 4%;
+			cursor: pointer;
+		}
+		.create-new {
+			display: inline-block;
+			margin-left: 1%;
+		}
+	}
+	.journal-container {
+		background-color: #FFEDC7;
+		box-shadow: 5px 5px 10px #CBBC94;
+		.entry-header {
+			font-family: 'Dosis', sans-serif;
+			text-align: right;
+			margin-top: 1%;
+			span {
+				font-size: 1.25em;
+			}
+			a {
+				color: #BD0202;
+			}
+			a:hover {
+				color: #961010;
+			}
+		}
+		textarea {
+			font-family: 'Dosis', sans-serif;
+			font-size: 1.25em;
+			background-color: #FFEDC7;
+			box-shadow: none;
+			border-style: none;
+			width: 95%;
+			min-height: 300px;
+			opacity: 1;
+		}
+	}
+	.submit {
+		margin-top: 2%;
+		button {
+			background-color: #F96468;
+			color: #fff;
+			font-family: 'Shadows Into Light Two', cursive;
+		}
+	}
+}

@@ -1,20 +1,39 @@
 <div ng-include="'partials/nav.html'"></div>
-<section ng-init="getAllEntries()">
-	<div>
-		<div class="dropdown">
-		  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-		    Choose a previous entry:
-		    <span class="caret"></span>
-		  </button>
-		  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-		    <li ng-repeat="entry in allUserEntries" ng-click="displaySingleEntry(entry.EntryId)">{{ entry.formattedDate }}</li>
-		  </ul>
+<section class="journal-view" ng-init="getAllEntries()">
+	<div class="container">
+		<div class="row welcome">
+			<h2>Welcome back, {{ currUserName }}.</h2>
+			<h3>Today is {{ currDate }}. What's on your mind?</h3>
 		</div>
-		<button ng-click="restoreDefaults()">Write New Entry</button>
-	</div>
-	<div>
-		<button ng-if="isEditing" ng-click="deleteEntry()">Delete This Entry</button>
-		<div><textarea name="journal-entry" id="journal-entry" cols="60" rows="20" ng-model="journalEntry.text" ng-keypress="assignDateStarted()"></textarea></div>
-		<button ng-click="submitEntry()">{{ textForSubmit }}</button>
+		<div class="row journal-options">
+			<div class="col-md-6 col-md-offset-3">
+				<div class="dropdown select-existing">
+				  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+				    Choose a previous entry:
+				    <span class="caret"></span>
+				  </button>
+				  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+				    <li ng-repeat="entry in allUserEntries" ng-click="displaySingleEntry(entry.EntryId)">{{ entry.formattedDate }}</li>
+				  </ul>
+				</div>
+				<div class="create-new">
+					<button class="btn btn-default" ng-click="restoreDefaults()">Write New Entry</button>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="journal-container col-md-8 col-md-offset-2">
+				<div class="entry-header">
+					<span class="pull-left">{{ journalEntry.formattedDate }}</span>
+					<a href="" ng-if="isEditing" ng-click="deleteEntry()"><i class="fa fa-times fa-2x" aria-hidden="true"></i></a>
+				</div>
+				<textarea name="journal-entry" id="journal-entry" ng-model="journalEntry.text" ng-keypress="assignDateStarted()"></textarea>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2 submit">
+				<button class="btn btn-default pull-right" ng-click="submitEntry()">{{ textForSubmit }}</button>
+			</div>
+		</div>
 	</div>
 </section>
