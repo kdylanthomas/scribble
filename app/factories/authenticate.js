@@ -5,10 +5,14 @@ app.factory('authenticate', function ($location) {
 	return {
 		getUser: () => localStorage.getItem('currUserId'),
 		setUser: (user) => {
+			if (user === null) {
+				localStorage.removeItem('currUserId');
+				$location.path('/login');
+			} else {
+				localStorage.setItem('currUserId', user.UserId);
+				$location.path('/journal');
+			}
 			currentUser = user;
-			localStorage.setItem('currUserId', user.UserId);
-			if (user !== null) $location.path('/journal')
-			else $location.path('/login'); // redirect user to journal view once authenticated
 		}
 	}
 });

@@ -7,6 +7,7 @@ app.controller('NavCtrl', [
 	function ($scope, $location, authenticate) {
 		$scope.logout = function () {
 			authenticate.setUser(null);
+			$location.path('/login');
 		}
 	}
 ]);
