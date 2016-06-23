@@ -1,0 +1,40 @@
+.login {
+	min-height: 660px;
+	background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.7 )), url('../img/scribble-bg.png') no-repeat center;
+	background-size: cover;
+	h1 {
+		font-family: 'Shadows Into Light Two', cursive;
+	}
+	.login-box {
+		text-align: center;
+		width: 30%;
+		margin-top: 16%;
+		background-color: #fff;
+		box-shadow: 5px 5px 5px #3D3D3D;
+		.header-text {
+			font-family: 'Shadows Into Light Two', cursive;
+		}
+		i {
+			color: #D1CFCF;
+		}
+		hr {
+			width: 85%;
+			color: #D1CFCF;
+		}
+		.description {
+			color: #383838;
+			font-family: 'Dosis', sans-serif;
+			line-height: 1.25em;
+			padding: 1% 8% 2%;
+		}
+		.oauth {
+			width: 100%; 
+			margin: 0;
+			padding: 2% 0;
+			background-color: #F96468;
+			font-family: 'Shadows Into Light Two', cursive;
+			color: #fff;
+			cursor: pointer;
+		}
+	}
+}
