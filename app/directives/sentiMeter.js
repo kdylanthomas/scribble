@@ -37,12 +37,12 @@ app.directive('sentiMeter', function () {
 				 
 				let background = meter.append("path")
 				    .datum({endAngle: twoPi})
-				    .style("fill", "#ddd")
+				    .style("fill", "#E9E5E5")
 				    .attr("d", arc);
 				 
 				let foreground = meter.append("path")
 				    .datum({endAngle:0})
-				    .style("fill", "#9BDE6F")
+				    .style("fill", "#CAE7B9")
 				    .attr("d", arc);
 				 
 				  foreground.transition()

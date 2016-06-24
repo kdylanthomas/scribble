@@ -62,7 +62,6 @@ app.controller('JournalCtrl', [
 					let entries = res.data;
 					entries.forEach((entry, i) => {
 						entry.formattedDate = moment(entry.DateStarted).format('dddd, MMMM Do YYYY');
-						console.log(entry);
 					});
 					$scope.allUserEntries = entries;
 				},

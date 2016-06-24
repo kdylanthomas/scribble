@@ -81,7 +81,7 @@ app.controller('DashboardCtrl', [
 			$.when(reformatEmotionData($scope.emotionAverages)).done((json) => {
 				console.log('done!', json);
 				$scope.d3EmotionData = json;
-			}); // current issue: async not playing well with d3
+			}); 
 		}
 
 		let findDominantEmotion = () => {

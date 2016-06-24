@@ -24,8 +24,10 @@
 		.description {
 			color: #383838;
 			font-family: 'Dosis', sans-serif;
-			line-height: 1.25em;
 			padding: 1% 8% 2%;
+			h4 {
+				line-height: 1.5em;
+			}
 		}
 		.oauth {
 			width: 100%; 

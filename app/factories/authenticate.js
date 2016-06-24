@@ -7,6 +7,7 @@ app.factory('authenticate', function ($location) {
 		setUser: (user) => {
 			if (user === null) {
 				localStorage.removeItem('currUserId');
+				localStorage.removeItem('currUserName');
 				$location.path('/login');
 			} else {
 				console.log(user);

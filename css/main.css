@@ -22,8 +22,9 @@
     .login .login-box .description {
       color: #383838;
       font-family: 'Dosis', sans-serif;
-      line-height: 1.25em;
       padding: 1% 8% 2%; }
+      .login .login-box .description h4 {
+        line-height: 1.5em; }
     .login .login-box .oauth {
       width: 100%;
       margin: 0;
