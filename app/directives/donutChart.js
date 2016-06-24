@@ -5,7 +5,7 @@ app.directive('donutChart', function () {
     let height = 250;
     let radius = Math.min(width, height) / 2;
 	let color = d3.scale.ordinal()
-    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+    .range(["#CAE7B9", "#F3DE8A", "#EB9486", "#7E7F9A", "#97A7B3"]);
 
 	return {
 		restrict: 'E',
@@ -56,6 +56,8 @@ app.directive('donutChart', function () {
 			    })
 			        .attr("dy", ".35em")
 			        .style("text-anchor", "middle")
+			        .attr("color", "white")
+			        .style("font-family", "Dosis")
 			        .text(function (d) {
 			        return d.data.emotion;
 			    });

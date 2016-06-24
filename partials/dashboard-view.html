@@ -1,8 +1,15 @@
 <div ng-include="'partials/nav.html'"></div>
-<section>
-	<div>this is a dashboard</div>
-	<h2>In your recent entries, your dominant emotion has been {{ dominantEmotion }}.</h2>
-	<donut-chart data="d3EmotionData"></donut-chart>
-	<h2>In terms of sentiment, your entries have been {{ sentimentDescription }}.</h2>
-	<senti-meter sentiment="d3SentimentData"></senti-meter>
+<section class="dashboard-view">
+	<div class="container">
+		<div classs="row">
+			<div class="col-md-4 col-md-offset-2">
+				<h2>In your recent entries, your dominant emotion has been {{ dominantEmotion }}.</h2>
+				<div class="donut"><donut-chart data="d3EmotionData"></donut-chart></div>
+			</div>
+			<div class="col-md-4">
+				<h2>In terms of sentiment, your entries have been {{ sentimentDescription }}.</h2>
+				<senti-meter sentiment="d3SentimentData"></senti-meter>
+			</div>
+		</div>
+	</div>
 </section>

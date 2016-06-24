@@ -42,7 +42,7 @@ app.directive('sentiMeter', function () {
 				 
 				let foreground = meter.append("path")
 				    .datum({endAngle:0})
-				    .style("fill", "orange")
+				    .style("fill", "#9BDE6F")
 				    .attr("d", arc);
 				 
 				  foreground.transition()
@@ -60,6 +60,7 @@ app.directive('sentiMeter', function () {
 				    .attr("text-anchor", "middle")
 				    .attr("dy", ".35em")
 				    .attr("font-size", "24")
+				    .attr("font-family", "Shadows Into Light Two")
 				    .text(sentiment["actual"].toFixed(2) * 100 + '%');
 			});
 		}

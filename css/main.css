@@ -84,6 +84,7 @@
       box-shadow: none;
       border-style: none;
       width: 95%;
+      max-width: 100%;
       min-height: 300px;
       opacity: 1; }
   .journal-view .submit {
@@ -92,3 +93,8 @@
       background-color: #F96468;
       color: #fff;
       font-family: 'Shadows Into Light Two', cursive; }
+
+.dashboard-view {
+  text-align: center; }
+  .dashboard-view h2 {
+    font-family: 'Shadows Into Light Two', cursive; }
