@@ -1,6 +1,21 @@
 .dashboard-view {
 	text-align: center;
-	h2 {
-		font-family: 'Shadows Into Light Two', cursive;
+	font-family: 'Shadows Into Light Two', cursive;
+	.average-words {
+		margin-bottom: 2%;
+	}
+	.emotion-graphs {
+		margin-top: 2%;
+	}
+	.box {
+		padding: 4% 0;
+		border-radius: 50%;
+		color: #fff;
+	}
+	.longest {
+		background-color: #EB9486;
+	}
+	.shortest {
+		background-color: #7E7F9A;
 	}
 }

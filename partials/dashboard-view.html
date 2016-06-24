@@ -1,9 +1,26 @@
 <div ng-include="'partials/nav.html'"></div>
 <section class="dashboard-view">
 	<div class="container">
-		<div classs="row">
+		<div class="row average-words">
+			<div class="col-md-8 col-md-offset-2">
+				<h2>You've written {{ totalEntries }} entries that are, on average, {{ wordCountAverage }} words long.</h2>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-2 col-md-offset-3 box longest">
+				<h4>Longest entry:</h4>
+				<h4>{{ longestEntry.date }}</h4>
+				<h4>{{ longestEntry.wordCount}} words</h4>
+			</div>
+			<div class="col-md-2 col-md-offset-2 box shortest">
+				<h4>Shortest entry:</h4>
+				<h4>{{ shortestEntry.date }}</h4>
+				<h4>{{ shortestEntry.wordCount}} words</h4>
+			</div>
+		</div>
+		<div class="row emotion-graphs">
 			<div class="col-md-4 col-md-offset-2">
-				<h2>In your recent entries, your dominant emotion has been {{ dominantEmotion }}.</h2>
+				<h2>In your recent entries, your dominant emotion has been joy.</h2>
 				<div class="donut"><donut-chart data="d3EmotionData"></donut-chart></div>
 			</div>
 			<div class="col-md-4">

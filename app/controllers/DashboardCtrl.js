@@ -20,6 +20,8 @@ app.controller('DashboardCtrl', [
 			sadness: 0
 		};
 
+		$scope.totalEntries = null;
+
 		$scope.d3EmotionData = null;
 
 		$scope.sentimentAverage = null;
@@ -41,7 +43,10 @@ app.controller('DashboardCtrl', [
 			return $q((resolve, reject) => {
 				$http.get(`${journalServer}EntryAnalysis?UserId=${$scope.currentUser}`)
 		 		.then(
-					res => resolve(res.data),
+					res => {
+						$scope.totalEntries = res.data.length;
+						resolve(res.data);
+					},
 					err => reject(err)
 			 	)
 			});
@@ -58,6 +63,8 @@ app.controller('DashboardCtrl', [
 			let sadnessSum = 0;
 			let sentimentSum = 0;
 			let wordCountSum = 0;
+			let minWordCount = 100000;
+			let maxWordCount = 0;
 			analyses.forEach((el, i) => {
 				console.log(el);
 				angerSum += el.Anger;
@@ -74,7 +81,7 @@ app.controller('DashboardCtrl', [
 			$scope.emotionAverages.surprise = surpriseSum / analyses.length;
 			$scope.emotionAverages.sadness = sadnessSum / analyses.length;
 			$scope.sentimentAverage = sentimentSum / analyses.length;
-			$scope.wordCountAverage = wordCountSum / analyses.length;
+			$scope.wordCountAverage = Math.floor(wordCountSum / analyses.length);
 			findDominantEmotion();
 			describeSentiment();
 			$scope.d3SentimentData = {'actual': $scope.sentimentAverage, 'total': 1};
@@ -82,6 +89,29 @@ app.controller('DashboardCtrl', [
 				console.log('done!', json);
 				$scope.d3EmotionData = json;
 			}); 
+		}
+
+		let findExtremes = analyses => {
+			let highest = 0;
+			let dateHighest = null;
+			let lowest = 1000000;
+			let dateLowest = null;
+			for (let i = 0; i < analyses.length; i++) {
+				if (analyses[i].WordCount > highest) {
+					highest = analyses[i].WordCount;
+					dateHighest = analyses[i].DateSubmitted;
+				}
+				if (analyses[i].WordCount < lowest) {
+					lowest = analyses[i].WordCount;
+					dateLowest = analyses[i].DateSubmitted;
+				}
+			}
+			console.log('highest', highest);
+			console.log('lowest', lowest);
+			console.log('dateHighest', dateHighest);
+			console.log('dateLowest', dateLowest);
+			$scope.longestEntry = {"date": moment(dateHighest).format("MMMM DD"), "wordCount": highest};
+			$scope.shortestEntry = {"date": moment(dateLowest).format("MMMM DD"), "wordCount": lowest};
 		}
 
 		let findDominantEmotion = () => {
@@ -100,11 +130,11 @@ app.controller('DashboardCtrl', [
 			if (sentiment >= 0 && sentiment <= 0.2) {
 				$scope.sentimentDescription = "very negative";
 			} else if (sentiment > 0.2 && sentiment <= 0.45) {
-				$scope.sentimentDescription = "somewhat negative";
+				$scope.sentimentDescription = "negative";
 			} else if (sentiment > 0.45 && sentiment <= 0.55) {
 				$scope.sentimentDescription = "neutral";
 			} else if (sentiment > 0.55 && sentiment <= 0.8) {
-				$scope.sentimentDescription = "somewhat positive";
+				$scope.sentimentDescription = "positive";
 			} else {
 				$scope.sentimentDescription = "very positive";
 			}
@@ -117,6 +147,7 @@ app.controller('DashboardCtrl', [
 					console.log('2: got the entry insights from the db');
 					$scope.userInsights = data;
 					findAverages(data);
+					findExtremes(data);
 				},
 				err => console.error(err)
 			)
